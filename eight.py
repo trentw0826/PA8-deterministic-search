@@ -17,8 +17,10 @@ import argparse
 
 class Puzzle():
     """
-    This is the 8-puzzle class.  You shouldn't have to modify it at all.
-    """  
+    8-puzzle class
+    """
+
+    SOLUTION_STATE = [0,1,2,3,4,5,6,7,8]
 
     def __init__(self, arrangement):
         """
@@ -112,13 +114,7 @@ class Puzzle():
         """
         Returns True if the puzzle is solved, False otherwise
         """
-        ######## TASK 1.1 BEGIN ##########
-        
-        #Add code to determine whether this puzzle is solved
-        
-        return False #Change this!
-
-        ######## TASK 1.1 END   ##########
+        return self.state == Puzzle.SOLUTION_STATE
 
 
     def __repr__(self):
