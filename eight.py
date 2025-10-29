@@ -218,13 +218,21 @@ def tiles_out_of_row_column(puzzle):
     and returns the sum of these two numbers.
     Remember not to count the blank tile as being out of place, or the heuristic is inadmissible
     """
-    ######## TASK 1.4.1 BEGIN   ##########
 
-    # YOUR TASK 1.4.1 CODE HERE
+    wrong_rows = 0
+    wrong_cols = 0
+
+    for idx, tile in enumerate(puzzle.state):
+        if tile == 0:
+            continue
+        if get_tile_row(idx) != get_tile_row(tile):
+            wrong_rows += 1
+        if get_tile_column(idx) != get_tile_column(tile):
+            wrong_cols += 1
+
+    return wrong_rows + wrong_cols
+
     
-    return 0 #change this
-    
-    ######## TASK 1.4.1 END   ##########
 
 def manhattan_distance_to_goal(puzzle):
     """
@@ -232,13 +240,18 @@ def manhattan_distance_to_goal(puzzle):
     its goal position.  Again, make sure not to include the distance from the blank to its goal.
     """
     
-    ######## TASK 1.4.2 BEGIN   #########
+    total_distance = 0
 
-    # YOUR TASK 1.4.2 CODE HERE
-    
-    return 0 #change this!
-    
-    ######## TASK 1.4.2 END   ##########  
+    for idx, tile in enumerate(puzzle.state):
+        if tile == 0:
+            continue
+        current_row = get_tile_row(idx)
+        current_col = get_tile_column(idx)
+        goal_row = get_tile_row(tile)
+        goal_col = get_tile_column(tile)
+        total_distance += abs(current_row - goal_row) + abs(current_col - goal_col)
+
+    return total_distance
 
     
 def get_tile_row(tile):
