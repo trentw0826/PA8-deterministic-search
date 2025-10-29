@@ -28,6 +28,7 @@ class Puzzle():
         In a solved puzzle, each place number holds the tile of the same number
         i.e. solution is state = [0,1,2,3,4,5,6,7,8]
         """
+        #TODO input validation
         self.state = arrangement[:]
         self.blank = None
 
@@ -146,31 +147,28 @@ class SearchNode():
         """
         Compute the f-value for this node
         """
-        ######## TASK 1.3 BEGIN ##########
-        
-        #Modify these lines to implement the search algorithms (greedy, Uniform-cost or A*)
+
         self.h = heuristic(self, self.options)
         self.f_value = 0
 
         if self.options.type == 'g':
-            #greedy search algorithm
-            self.f_value = 0 # Change this to implement greedy!
+            #greedy search algorithm: f(n) = h(n)
+            self.f_value = self.h
 
         elif self.options.type == 'u':
-            #uniform cost search algorithm
-            self.f_value = 0 # Change this to implement uniform cost search!
+            #uniform cost search algorithm: f(n) = g(n)
+            self.f_value = self.cost
 
         elif self.options.type == 'a':
-            #A* search algorithm
-            self.f_value = 0 # Change this to implement A*!
+            #A* search algorithm: f(n) = g(n) + h(n)
+            self.f_value = self.cost + self.h
 
         else:
             print('Invalid search type (-t) selected: Valid options are g, u, and a')
             sys.exit()
 
-        ######## TASK 1.3 END   ##########
 
-    #Comparison operator. Don't modify this or best-first search might stop working
+    #Comparison operator 
     def __lt__(self,other):
         """
         Comparison operator so that nodes will be sorted in priority queue based on f-value
@@ -512,4 +510,4 @@ if __name__ == '__main__':
         print('Average search time: ', tot_time / num_solved)
         print('Average solution length: ', path_length / num_solved)
     else:
-        print('A puzzle was not solved.  This means you haven\'t correctly implemented something. Please double check your code and try again.')
+        print('No puzzles were solved')
