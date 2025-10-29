@@ -2,6 +2,7 @@
 """
 Test script to run the algorithm comparison and generate the plot
 """
+
 import sys
 import argparse
 

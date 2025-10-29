@@ -1,28 +1,13 @@
 """
 8-Puzzle class and related functionality
-
-Code for AI Class Programming Assignment 1
-Written by Chris Archibald, modified by Trent Welling
-archibald@cs.byu.edu, tdw57@byu.edu
-
-GOAL: (0 is the blank tile)
-0 1 2
-3 4 5
-6 7 8
 """
 
 class Puzzle:
-    """
-    8-puzzle class
-    """
-
-    SOLUTION_STATE = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    SOLUTION_STATE = [0, 1, 2, 3, 4, 5, 6, 7, 8]    # Tiles belong in their index positions, 0 is blank
 
     def __init__(self, arrangement):
         """
         The state (and arrangement passed in) is a list of length 9, that stores which tile is in each place
-        In a solved puzzle, each place number holds the tile of the same number
-        i.e. solution is state = [0,1,2,3,4,5,6,7,8]
         """
         # TODO input validation
         self.state = arrangement[:]

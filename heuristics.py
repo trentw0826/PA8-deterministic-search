@@ -1,9 +1,5 @@
 """
 Heuristic functions for the 8-puzzle problem
-
-Code for AI Class Programming Assignment 1
-Written by Chris Archibald, modified by Trent Welling
-archibald@cs.byu.edu, tdw57@byu.edu
 """
 
 import sys
