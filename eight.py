@@ -7,9 +7,8 @@ import random
 import argparse 
 
 # Code for AI Class Programming Assignment 1
-# Written by Chris Archibald
-# archibald@cs.byu.edu
-# Last Updated January 24, 2020
+# Written by Chris Archibald, modified by Trent Welling
+# archibald@cs.byu.edu, tdw57@byu.edu
 
 # GOAL: (0 is the blank tile)
 # 0 1 2
