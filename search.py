@@ -164,16 +164,14 @@ def run_ida_star(node, threshold, visited):
             if result < min_threshold:
                 min_threshold = result
                 
-            # Remove this state from the visited list (backtrack)
+            # Remove this state from the visited list
             del visited[node.puzzle.id()]
 
-        # That move didn't lead to a solution, so lets try the next one
-        # First, though, we need to undo the move (to return puzzle to state before we tried that move)
+        # Undo move
         node.puzzle.undo_move(m)
-        # Remove that last move we tried from the path
         node.path = node.path[0:-1]        
-        # Remove 1 from node's cost
         node.cost = node.cost - 1
+        
         # Recompute f-value with reverted cost
         node.compute_f_value()
     

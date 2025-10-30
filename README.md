@@ -195,7 +195,7 @@ After production and analysis of raw search data (nodes expanded, path lengths d
 
 ### Experience Implementing IDA* (Covers Part 2)
 
-
+The implementation of IDA* was largely straightforward. Given the existing pattern of iterative searching implemented for IDS, it wasn't too complicated to extend the idea to limit searches by an f-value. The most difficult logic was making sure that nodes that were explored and didn't turn up a solution were properly de-considered from the active path and cost. Additionally, returning the proper f-value (the minimum value that exceeded the current threshold) required some creativity in tracking across multiple recursive calls to the exploration function. In implementing this function and observing the results I learned IDA* can dramatically improve the relationship between finding a valid solution and the time/memory cost for doing so. On a broader level, keeping track of creatively-chosen cached values can bridge the gap between orders of complexity in algorithms processing large amounts of data.
 
 ## Configuration
 
