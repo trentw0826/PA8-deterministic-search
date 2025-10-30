@@ -53,22 +53,22 @@ python main.py medium.txt -s bfs -f md -t a
 # Use IDA* with Manhattan Distance heuristic  
 python main.py hard.txt --search ids --function md --type a
 
-# Compare IDA* vs Original Iterative Deepening on the same puzzle
+# Compare IDA* vs Basic Iterative Deepening on the same puzzle
 python main.py medium.txt --search ids --function md --type a    # IDA*
-python main.py medium.txt --search oids --function top --type u  # Original IDS
+python main.py medium.txt --search bids --function top --type u  # Basic IDS
 ```
 
 #### Command Line Arguments
 
 - `filename`: Puzzle file to solve (required)
-- `-s, --search`: Search type - `ids` (IDA* - Iterative Deepening A*), `oids` (Original Iterative Deepening Search), or `bfs` (best-first)
+- `-s, --search`: Search type - `ids` (IDA* - Iterative Deepening A*), `bids` (Basic Iterative Deepening Search), or `bfs` (best-first)
 - `-f, --function`: Heuristic function - `top` (tiles out of place), `torc` (tiles out of row/column), or `md` (manhattan distance)
 - `-t, --type`: Evaluation function - `u` (uniform cost), `g` (greedy), or `a` (A*)
 - `--input-dir`: Input directory for puzzle files (default: `puzzles`)
 
 **Notes:** 
 - For optimal IDA* performance, use with evaluation function type `a` (A*) to ensure f(n) = g(n) + h(n).
-- Use `oids` to run the original iterative deepening search for comparison with IDA*.
+- Use `bids` to run the basic iterative deepening search for comparison with IDA*.
 
 ### Algorithm Performance Comparison
 
@@ -90,9 +90,11 @@ python test_algorithms.py easy.txt --input-dir puzzles --output-dir results
 ```
 
 This generates:
-- Detailed performance statistics printed to console
-- Grouped bar chart visualization saved as PNG
-- Comparison of nodes expanded across all algorithm-heuristic combinations
+- Detailed efficiency statistics printed to console (nodes expanded per solution step)
+- Grouped bar chart visualization saved as PNG showing algorithm efficiency
+- Comparison of search efficiency across all algorithm-heuristic combinations
+- Includes IDA* (Iterative Deepening A*) alongside traditional best-first search algorithms
+- Both raw performance metrics and normalized efficiency ratios for comprehensive analysis
 
 ## Search Strategies
 
@@ -167,12 +169,14 @@ Puzzle files contain one puzzle per line, where each line is 9 digits representi
 | Worst      | *            | -                  | -              | -                   |
 *\*Worst puzzles were not computed in a reasonable time*
 
-### 3 Algorithms x 3 Heuristics Analysis (Task 1.5)
-![easy results](/results/algorithm_comparison_easy.png)
-![medium results](/results/algorithm_comparison_medium.png)
-![hard results](/results/algorithm_comparison_hard.png)
-![random results](/results/algorithm_comparison_random.png)
-![worst results](/results/algorithm_comparison_worst.png)
+### 4 Algorithms x 3 Heuristics Efficiency Analysis
+![easy results](/results/algorithm_efficiency_easy.png)
+![medium results](/results/algorithm_efficiency_medium.png)
+![hard results](/results/algorithm_efficiency_hard.png)
+![random results](/results/algorithm_efficiency_random.png)
+![worst results](/results/algorithm_efficiency_worst.png)
+
+**Note:** The algorithm comparison displays **efficiency metrics** (nodes expanded per solution step) rather than raw node counts. This provides a more meaningful comparison by normalizing performance against solution complexity. Lower values indicate better efficiency. The analysis includes IDA* (Iterative Deepening A*) alongside the original three algorithms (Uniform-Cost, Greedy Best-First, and A*), showing how heuristic quality dramatically affects search efficiency.
 
 
 ## Configuration
@@ -186,12 +190,10 @@ Modify `config.py` to adjust:
 ## Academic Context
 
 This implementation was developed for an AI course programming assignment focused on:
-- Understanding different search strategies
-- Comparing heuristic effectiveness  
-- Analyzing time and space complexity trade-offs
+- Understanding different search strategies in node spaces
+- Comparing the effectiveness of various heuristics
+- Analyzing time and space complexity trade-offs between algorithms/heuristics
 - Implementing clean, modular code architecture
-
-**Recent Update:** The original iterative deepening search has been enhanced to IDA* (Iterative Deepening A*) to demonstrate advanced search algorithms that combine the benefits of both iterative deepening and A* search.
 
 ## Authors
 

@@ -89,11 +89,10 @@ def run_iterative_search(start_node):
         total_expanded += visited['N']
         
         # Check the result
-        if isinstance(result, int):
-            # Solution found! result is the path length
+        if isinstance(result, tuple) and result[0] == "SOLUTION":
             print('Expanded ', total_expanded, 'nodes')
             print('IDA* Found solution with threshold', threshold)
-            return total_expanded, result
+            return total_expanded, result[1]
         elif result == float('inf'):
             # No solution exists
             print('No solution found - search space exhausted')
@@ -126,7 +125,8 @@ def run_ida_star(node, threshold, visited):
     if node.puzzle.is_solved():
         # It is! Print out solution and return solution length
         print('IDA* SOLVED THE PUZZLE! SOLUTION = ', node.path)
-        return len(node.path)
+        # Return a tuple to distinguish from f-values: (True, path_length)
+        return ("SOLUTION", len(node.path))
     
     # Track the minimum f-value that exceeded the threshold
     min_threshold = float('inf')
@@ -156,8 +156,8 @@ def run_ida_star(node, threshold, visited):
             result = run_ida_star(node, threshold, visited)    
             
             # Check if a solution was found
-            if isinstance(result, int):
-                # Solution found! Return the path length
+            if isinstance(result, tuple) and result[0] == "SOLUTION":
+                # Solution found! Return the tuple
                 return result
             
             # Update minimum threshold for next iteration
@@ -246,7 +246,7 @@ def run_best_first_search(fringe, options):
 
 def run_basic_iterative_search(start_node):
     """
-    This runs the original iterative deepening search (for comparison with IDA*)
+    This runs the basic iterative deepening search (for comparison with IDA*)
     It caps the depth of the search at 40 (no 8-puzzles have solutions this long)
     """
     # Our initial depth limit
@@ -278,7 +278,7 @@ def run_basic_iterative_search(start_node):
         if path_length is not None:
             # It was! Print out information and return the search stats
             print('Expanded ', total_expanded, 'nodes')
-            print('Original IDS Found solution at depth', depth_limit)
+            print('Basic IDS Found solution at depth', depth_limit)
             return total_expanded, path_length
             
         # No solution was found at this depth limit, so increment our depth-limit    
@@ -300,7 +300,7 @@ def run_dfs(node, depth_limit, visited):
     # Check to see if this is a goal node
     if node.puzzle.is_solved():
         # It is! Print out solution and return solution length
-        print('Original Iterative Deepening SOLVED THE PUZZLE! SOLUTION = ', node.path)
+        print('Basic Iterative Deepening SOLVED THE PUZZLE! SOLUTION = ', node.path)
         return len(node.path)
         
     # Check to see if the depth limit has been reached (number of actions that have been taken)

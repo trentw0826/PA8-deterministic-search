@@ -89,7 +89,7 @@ def main():
             # Use this line to run Basic Iterative Deepening Search
             exp, pl = run_basic_iterative_search(start_node)
         else:
-            print("Search option not valid. Can be bfs, ids, or oids")
+            print("Search option not valid. Can be bfs, ids, or bids")
             sys.exit()
 
         if exp is None:
