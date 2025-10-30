@@ -20,6 +20,9 @@ DEFAULT_EVAL_TYPE = 'u'     # uniform cost
 DEFAULT_PLOT_DPI = 300
 DEFAULT_FIGURE_SIZE = (12, 8)
 
+# Other constants
+MAX_TO_SOLVE = 1
+
 def get_input_path(filename, input_dir=DEFAULT_INPUT_DIR):
     """Get full path to input file"""
     return os.path.join(input_dir, filename)

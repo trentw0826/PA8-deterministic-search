@@ -13,7 +13,7 @@ from queue import PriorityQueue
 
 from puzzle import Puzzle
 from search import SearchNode, run_best_first_search, run_iterative_search
-from config import DEFAULT_INPUT_DIR, DEFAULT_SEARCH_TYPE, DEFAULT_HEURISTIC, DEFAULT_EVAL_TYPE
+from config import DEFAULT_INPUT_DIR, DEFAULT_SEARCH_TYPE, DEFAULT_HEURISTIC, DEFAULT_EVAL_TYPE, MAX_TO_SOLVE
 
 
 def get_options(args=sys.argv[1:]):
@@ -49,9 +49,6 @@ def main():
     
     # Open puzzle file
     pf = open(puzzle_path, 'r')
-    
-    # You can modify the maximum number of puzzles to solve if you want to test on more puzzles
-    max_to_solve = 40
     
     # Variables to keep track of solving statistics
     num_solved = 0
@@ -107,16 +104,16 @@ def main():
         num_solved += 1
         
         # Stop after we have solved the specified number of puzzles
-        if num_solved >= max_to_solve:
+        if num_solved >= MAX_TO_SOLVE:
             break
             
-    print('Done with solving puzzles.\\n\\n')
+    print('Done with solving puzzles.\n\n')
             
     # Print out statistics about this batch
     if num_solved > 0:
         print('Solved', num_solved, 'puzzles from file: ', puzzle_path)
         print('Average nodes expanded: ', float(exp_num) / float(num_solved))
-        print('Average search time: ', tot_time / num_solved)
+        print('Average search time: ', format(tot_time / num_solved, '.4f'))
         print('Average solution length: ', path_length / num_solved)
     else:
         print('No puzzles were solved')
