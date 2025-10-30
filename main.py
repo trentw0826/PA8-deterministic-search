@@ -24,7 +24,7 @@ def get_options(args=sys.argv[1:]):
                        help="Search type: Options: ids (IDA* - Iterative Deepening A*), bids (Basic Iterative Deepening Search), or bfs (best first search)", 
                        default=DEFAULT_SEARCH_TYPE)
     parser.add_argument("-f", '--function', 
-                       help="Heuristic function used: Options: top (tiles out of place), torc (tiles out of row/column), or md (manhattan distance)",
+                       help="Heuristic function used: Options: top (tiles out of place), torc (tiles out of row/column), md (manhattan distance), or mdlc (manhattan distance + linear conflicts)",
                        default=DEFAULT_HEURISTIC)
     parser.add_argument("-t", '--type', 
                        help="Evaluation function type: Options: g (greedy), u (uniform cost), or a (a-star)", 

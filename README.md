@@ -23,11 +23,12 @@ Where `0` represents the blank (empty) space.
   - Greedy Best-First Search
   - A\* Search
 
-- **Three Heuristic Functions:**
+- **Four Heuristic Functions:**
 
   - Tiles Out of Place: Counts tiles not in their goal position
   - Tiles Out of Row/Column: Counts tiles in wrong row plus tiles in wrong column
   - Manhattan Distance: Sum of distances each tile must travel to reach its goal position
+  - Manhattan Distance + Linear Conflicts: Enhanced Manhattan Distance with conflict detection
 
 - **Performance Analysis:**
 
@@ -56,6 +57,9 @@ python main.py medium.txt -s bfs -f md -t a
 # Use IDA* with Manhattan Distance heuristic
 python main.py hard.txt --search ids --function md --type a
 
+# Use IDA* with the most advanced heuristic (Manhattan Distance + Linear Conflicts)
+python main.py hard.txt --search ids --function mdlc --type a
+
 # Compare IDA* vs Basic Iterative Deepening on the same puzzle
 python main.py medium.txt --search ids --function md --type a    # IDA*
 python main.py medium.txt --search bids --function top --type u  # Basic IDS
@@ -65,7 +69,7 @@ python main.py medium.txt --search bids --function top --type u  # Basic IDS
 
 - `filename`: Puzzle file to solve (required)
 - `-s, --search`: Search type - `ids` (IDA* - Iterative Deepening A*), `bids` (Basic Iterative Deepening Search), or `bfs` (best-first)
-- `-f, --function`: Heuristic function - `top` (tiles out of place), `torc` (tiles out of row/column), or `md` (manhattan distance)
+- `-f, --function`: Heuristic function - `top` (tiles out of place), `torc` (tiles out of row/column), `md` (manhattan distance), or `mdlc` (manhattan distance + linear conflicts)
 - `-t, --type`: Evaluation function - `u` (uniform cost), `g` (greedy), or `a` (A\*)
 - `--input-dir`: Input directory for puzzle files (default: `puzzles`)
 
@@ -153,7 +157,14 @@ This generates:
 3. **Manhattan Distance (md)**
    - Sum of distances each tile must travel to reach goal
    - Admissible
-   - Most informed of the three heuristics and often leads to the best performance
+   - Well-informed heuristic that often leads to good performance
+
+4. **Manhattan Distance + Linear Conflicts (mdlc)**
+   - Manhattan Distance enhanced with linear conflict detection
+   - When tiles are in correct row/column but need to pass each other, adds 2 for each conflict
+   - Admissible and more informed than basic Manhattan Distance
+   - Detects situations where tiles must move out of each other's way
+   - Often provides the best performance by accounting for tile interaction patterns
 
 ## Puzzle File Format
 

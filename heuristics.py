@@ -15,8 +15,10 @@ def heuristic(node, options):
         return tiles_out_of_row_column(node.puzzle)
     elif options.function == 'md':
         return manhattan_distance_to_goal(node.puzzle)
+    elif options.function == 'mdlc':
+        return manhattan_distance_with_linear_conflicts(node.puzzle)
     else:
-        print('Invalid heuristic selected. Options are top, torc, and md')
+        print('Invalid heuristic selected. Options are top, torc, md, and mdlc')
         sys.exit()
 
 
@@ -76,6 +78,96 @@ def manhattan_distance_to_goal(puzzle):
         total_distance += abs(current_row - goal_row) + abs(current_col - goal_col)
 
     return total_distance
+
+
+def manhattan_distance_with_linear_conflicts(puzzle):
+    """
+    Manhattan Distance with Linear Conflicts heuristic.
+    This enhances Manhattan distance by detecting when tiles are in the correct row/column
+    but need to pass each other to reach their goal positions, adding 2 for each conflict.
+    
+    A linear conflict occurs when:
+    - Two tiles are in their correct row/column
+    - Their goal positions are also in that same row/column 
+    - They are in reverse order relative to their goals
+    
+    For each such conflict, we add 2 to the heuristic (minimum moves to resolve).
+    """
+    # Start with basic Manhattan distance
+    md_distance = manhattan_distance_to_goal(puzzle)
+    
+    # Add linear conflicts
+    conflicts = 0
+    
+    # Check for row conflicts
+    for row in range(3):
+        conflicts += count_linear_conflicts_in_line(puzzle, row, is_row=True)
+    
+    # Check for column conflicts  
+    for col in range(3):
+        conflicts += count_linear_conflicts_in_line(puzzle, col, is_row=False)
+    
+    return md_distance + 2 * conflicts
+
+
+def count_linear_conflicts_in_line(puzzle, line_num, is_row=True):
+    """
+    Count linear conflicts in a specific row or column.
+    
+    Args:
+        puzzle: The puzzle state
+        line_num: Row number (0-2) if is_row=True, column number (0-2) if is_row=False
+        is_row: True to check a row, False to check a column
+    
+    Returns:
+        Number of linear conflicts in this line
+    """
+    # Get tiles in this line that belong in this line
+    tiles_in_correct_line = []
+    
+    for pos in range(3):
+        if is_row:
+            idx = line_num * 3 + pos  # Convert row,col to index
+        else:
+            idx = pos * 3 + line_num  # Convert row,col to index
+            
+        tile = puzzle.state[idx]
+        
+        # Skip blank tile
+        if tile == 0:
+            continue
+            
+        # Check if this tile belongs in this row/column
+        tile_goal_row = get_tile_row(tile)
+        tile_goal_col = get_tile_column(tile)
+        
+        if is_row and tile_goal_row == line_num:
+            tiles_in_correct_line.append((tile, pos))
+        elif not is_row and tile_goal_col == line_num:
+            tiles_in_correct_line.append((tile, pos))
+    
+    # Count conflicts among tiles that belong in this line
+    conflicts = 0
+    
+    # For each pair of tiles in the correct line
+    for i in range(len(tiles_in_correct_line)):
+        for j in range(i + 1, len(tiles_in_correct_line)):
+            tile1, pos1 = tiles_in_correct_line[i]
+            tile2, pos2 = tiles_in_correct_line[j]
+            
+            # Get their goal positions in this line
+            if is_row:
+                goal_pos1 = get_tile_column(tile1)
+                goal_pos2 = get_tile_column(tile2)
+            else:
+                goal_pos1 = get_tile_row(tile1)
+                goal_pos2 = get_tile_row(tile2)
+            
+            # Check if they are in conflicting order
+            if (pos1 < pos2 and goal_pos1 > goal_pos2) or (pos1 > pos2 and goal_pos1 < goal_pos2):
+                conflicts += 1
+    
+    return conflicts
 
 
 def get_tile_row(tile):

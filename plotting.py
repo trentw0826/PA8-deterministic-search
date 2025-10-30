@@ -68,7 +68,8 @@ class AlgorithmTester:
     HEURISTICS = {
         'top': 'Tiles Out of Place',
         'torc': 'Tiles Out of Row/Col',
-        'md': 'Manhattan Distance'
+        'md': 'Manhattan Distance',
+        'mdlc': 'Manhattan Distance + Linear Conflicts'
     }
     
     def __init__(self, puzzle_file: str, input_dir: str = DEFAULT_INPUT_DIR):
@@ -250,7 +251,7 @@ class ResultAnalyzer:
         """Create clean efficiency comparison chart"""
         # Organize data by algorithm and heuristic
         alg_order = ['Uniform-Cost', 'Greedy Best-First', 'A*', 'IDA*']
-        heur_order = ['Tiles Out of Place', 'Tiles Out of Row/Col', 'Manhattan Distance']
+        heur_order = ['Tiles Out of Place', 'Tiles Out of Row/Col', 'Manhattan Distance', 'Manhattan Distance + Linear Conflicts']
         
         # Create matrix of efficiency values
         efficiency_matrix = []
@@ -263,16 +264,16 @@ class ResultAnalyzer:
             efficiency_matrix.append(alg_row)
         
         # Create grouped bar chart
-        fig, ax = plt.subplots(figsize=(12, 7))
+        fig, ax = plt.subplots(figsize=(14, 7))
         
         x = np.arange(len(alg_order))
-        width = 0.25
+        width = 0.2  # Narrower bars to fit 4 heuristics
         
-        colors = ['#2E86AB', '#A23B72', '#F18F01']
+        colors = ['#2E86AB', '#A23B72', '#F18F01', '#8E44AD']
         
         for i, heur in enumerate(heur_order):
             values = [row[i] for row in efficiency_matrix]
-            bars = ax.bar(x + i * width - width, values, width, 
+            bars = ax.bar(x + i * width - 1.5*width, values, width, 
                          label=heur, color=colors[i], alpha=0.8)
             
             # Add value labels on bars
@@ -309,11 +310,11 @@ class ResultAnalyzer:
         
         # Organize data by algorithm and heuristic
         alg_order = ['IDA*', 'A*', 'Greedy Best-First', 'Uniform-Cost']  # Best to worst memory efficiency
-        heur_order = ['Manhattan Distance', 'Tiles Out of Row/Col', 'Tiles Out of Place']
-        heur_short = ['MD', 'TORC', 'TOP']
+        heur_order = ['Manhattan Distance + Linear Conflicts', 'Manhattan Distance', 'Tiles Out of Row/Col', 'Tiles Out of Place']
+        heur_short = ['MDLC', 'MD', 'TORC', 'TOP']
         
         # Colors for each heuristic
-        heur_colors = ['#2E86AB', '#A23B72', '#F18F01']
+        heur_colors = ['#8E44AD', '#2E86AB', '#A23B72', '#F18F01']
         
         # Left plot: Memory per step (horizontal bars)
         y_positions = []
@@ -323,7 +324,7 @@ class ResultAnalyzer:
             for heur_idx, heur in enumerate(heur_order):
                 result = next((r for r in self.solved_results if r.algorithm == alg and r.heuristic == heur), None)
                 if result:
-                    y_pos = alg_idx * 4 + heur_idx
+                    y_pos = alg_idx * 5 + heur_idx
                     y_positions.append(y_pos)
                     y_labels.append(f"{alg}\n{heur_short[heur_idx]}")
                     
@@ -344,7 +345,7 @@ class ResultAnalyzer:
         
         # Add algorithm separators
         for i in range(1, len(alg_order)):
-            ax1.axhline(y=i*4-0.5, color='gray', linestyle='--', alpha=0.5)
+            ax1.axhline(y=i*5-0.5, color='gray', linestyle='--', alpha=0.5)
         
         # Right plot: Total memory usage (stacked bars)
         alg_memory_data = {}
