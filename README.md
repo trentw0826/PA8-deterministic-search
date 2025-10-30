@@ -1,6 +1,6 @@
 # 8-Puzzle Search Algorithm Solver
 
-A comprehensive implementation of multiple search algorithms for solving the classic 8-puzzle problem. This project compares the performance of different search strategies (Iterative Deepening, Uniform-Cost, Greedy Best-First, and A*) using various heuristic functions.
+A comprehensive implementation of multiple search algorithms for solving the classic 8-puzzle problem. This project compares the performance of different search strategies (IDA*, Uniform-Cost, Greedy Best-First, and A*) using various heuristic functions.
 
 ## Overview
 
@@ -17,7 +17,7 @@ Where `0` represents the blank (empty) space.
 ## Features
 
 - **Multiple Search Algorithms:**
-  - Iterative Deepening Search (IDS)
+  - IDA* (Iterative Deepening A*)
   - Uniform-Cost Search 
   - Greedy Best-First Search
   - A* Search
@@ -44,23 +44,31 @@ Where `0` represents the blank (empty) space.
 Solve puzzles using the main solver:
 
 ```bash
-# Basic usage with default settings (IDS, tiles out of place heuristic, uniform cost)
+# Basic usage with default settings (IDA*, tiles out of place heuristic, A* evaluation)
 python main.py easy.txt
 
 # Specify search algorithm, heuristic, and evaluation function
 python main.py medium.txt -s bfs -f md -t a
 
-# Use A* with Manhattan Distance heuristic
-python main.py hard.txt --search bfs --function md --type a
+# Use IDA* with Manhattan Distance heuristic  
+python main.py hard.txt --search ids --function md --type a
+
+# Compare IDA* vs Original Iterative Deepening on the same puzzle
+python main.py medium.txt --search ids --function md --type a    # IDA*
+python main.py medium.txt --search oids --function top --type u  # Original IDS
 ```
 
 #### Command Line Arguments
 
 - `filename`: Puzzle file to solve (required)
-- `-s, --search`: Search type - `ids` (iterative deepening) or `bfs` (best-first)
+- `-s, --search`: Search type - `ids` (IDA* - Iterative Deepening A*), `oids` (Original Iterative Deepening Search), or `bfs` (best-first)
 - `-f, --function`: Heuristic function - `top` (tiles out of place), `torc` (tiles out of row/column), or `md` (manhattan distance)
 - `-t, --type`: Evaluation function - `u` (uniform cost), `g` (greedy), or `a` (A*)
 - `--input-dir`: Input directory for puzzle files (default: `puzzles`)
+
+**Notes:** 
+- For optimal IDA* performance, use with evaluation function type `a` (A*) to ensure f(n) = g(n) + h(n).
+- Use `oids` to run the original iterative deepening search for comparison with IDA*.
 
 ### Algorithm Performance Comparison
 
@@ -88,12 +96,21 @@ This generates:
 
 ## Search Strategies
 
-1. **Iterative Deepening Search (IDS)**
-   - Complete and optimal search
-   - Uses depth-limited DFS with increasing depth limits
-   - Memory efficient but may re-expand nodes
+1. **IDA\* (Iterative Deepening A\*)**
+   - Complete and optimal search algorithm
+   - Uses f-value thresholds (f = g + h) with increasing limits
+   - Memory efficient like iterative deepening but with A* evaluation
+   - Combines benefits of A* optimality with linear memory usage
+   - Ideal for problems where memory is limited but optimal solutions are required
 
-2. **Uniform-Cost Search** 
+2. **Basic Iterative Deepening Search (bids)**
+   - Complete and optimal search algorithm (available for comparison)
+   - Uses depth limits with increasing values (blind search)
+   - Memory efficient but may expand significantly more nodes than IDA*
+   - Provided as an alternative to compare performance with IDA*
+   - Useful for understanding the benefits of informed vs uninformed search
+
+3. **Uniform-Cost Search** 
    - Uses f(n) = g(n) where g(n) is the path cost
    - Optimal but may expand many nodes
    - Equivalent to Dijkstra's algorithm
@@ -161,8 +178,8 @@ Puzzle files contain one puzzle per line, where each line is 9 digits representi
 ## Configuration
 
 Modify `config.py` to adjust:
-- Default directories for input/output files
-- Search algorithm and heuristic defaults
+- Default directories for input/output files  
+- Search algorithm and heuristic defaults (current: IDA*, tiles out of place, uniform cost)
 - Maximum number of puzzles to solve
 - Plot appearance settings (DPI, figure size)
 
@@ -170,9 +187,11 @@ Modify `config.py` to adjust:
 
 This implementation was developed for an AI course programming assignment focused on:
 - Understanding different search strategies
-- Comparing heuristic effectiveness
+- Comparing heuristic effectiveness  
 - Analyzing time and space complexity trade-offs
 - Implementing clean, modular code architecture
+
+**Recent Update:** The original iterative deepening search has been enhanced to IDA* (Iterative Deepening A*) to demonstrate advanced search algorithms that combine the benefits of both iterative deepening and A* search.
 
 ## Authors
 

@@ -12,7 +12,7 @@ import argparse
 from queue import PriorityQueue
 
 from puzzle import Puzzle
-from search import SearchNode, run_best_first_search, run_iterative_search
+from search import SearchNode, run_best_first_search, run_iterative_search, run_basic_iterative_search
 from config import DEFAULT_INPUT_DIR, DEFAULT_SEARCH_TYPE, DEFAULT_HEURISTIC, DEFAULT_EVAL_TYPE, MAX_TO_SOLVE
 
 
@@ -21,7 +21,7 @@ def get_options(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description="8-Puzzle Solver.")
     parser.add_argument('file', metavar='FILENAME', type=str, help="File of puzzles to solve")
     parser.add_argument("-s", '--search', 
-                       help="Search type: Options: ids (iterative deepening search) or bfs (best first search)", 
+                       help="Search type: Options: ids (IDA* - Iterative Deepening A*), bids (Basic Iterative Deepening Search), or bfs (best first search)", 
                        default=DEFAULT_SEARCH_TYPE)
     parser.add_argument("-f", '--function', 
                        help="Heuristic function used: Options: top (tiles out of place), torc (tiles out of row/column), or md (manhattan distance)",
@@ -83,10 +83,13 @@ def main():
             # Run the best-first searches
             exp, pl = run_best_first_search(pq, options)
         elif options.search == 'ids': 
-            # Use this line to run the iterative deepening-search
+            # Use this line to run IDA* (Iterative Deepening A*)
             exp, pl = run_iterative_search(start_node)
+        elif options.search == 'bids':
+            # Use this line to run Basic Iterative Deepening Search
+            exp, pl = run_basic_iterative_search(start_node)
         else:
-            print("Search option not valid. Can be bfs or ids")
+            print("Search option not valid. Can be bfs, ids, or oids")
             sys.exit()
 
         if exp is None:
